@@ -44,4 +44,4 @@ def index():
     return redirect('https://vk.com/1mi_musulmane_s_nami_bog')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
