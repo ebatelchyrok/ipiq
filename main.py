@@ -4,8 +4,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    # Получение IP-адреса клиента
-    client_ip = request.remote_addr
+    # Попробуем получить реальный IP-адрес клиента через заголовок X-Forwarded-For
+    client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
 
     # Получение User-Agent
     user_agent = request.headers.get('User-Agent')
